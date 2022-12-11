@@ -1,6 +1,6 @@
 import { parseLinesToArraySync } from '../utilities/parseLinesToArray.js';
 
-// Begin region: function declarations
+//#region Function Declarations
 function linesToGroups(rawLines) {
     const elvesArray = [[]];
     for (let i = 0; i < rawLines.length; i++) {
@@ -40,15 +40,17 @@ function getSumOfGroupsSortedDescending(arrOfGroups) {
     sums.sort((a, b) => b - a); // In place
     return sums;
 }
-// End region: function declarations
+//#endregion Function Declarations
 
 const lines = parseLinesToArraySync('./input.txt');
 const elves = linesToGroups(lines);
 
-// Part 1
+//#region Part 1
 const [maxSum, maxSumIndex] = getMaxSumOfGroup(elves);
 console.log(maxSum);
+//#endregion Part 1
 
-// Part 2
+//#region Part 2
 const [calorieMax, calorieSecondToMax, calorieThirdToMax] = getSumOfGroupsSortedDescending(elves);
 console.log(calorieMax + calorieSecondToMax + calorieThirdToMax);
+//#endregion Part 2

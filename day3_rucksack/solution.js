@@ -1,6 +1,6 @@
 import { parseLinesToArraySync } from '../utilities/parseLinesToArray.js';
 
-// Begin Region: function declarations
+//#region Function Declarations
 function partitionStringInTwo(string, numPartitions = 2) {
     const partitionIndex = string.length / 2;
     const firstHalf = string.slice(0, partitionIndex);
@@ -63,13 +63,16 @@ function linesToStringPartitionPrioritySum(lines) {
         return characterToPriority(intersectingChar);
     });
 }
-// End Region: function declarations
+//#endregion Function Declarations
 
 const lines = parseLinesToArraySync('./input.txt');
-// Part 1
+
+//#region Part 1
 const priorities = linesToStringPartitionPrioritySum(lines);
 console.log(priorities.reduce((acc, ele) => acc + ele, 0));
-// Part 2
+//#endregion Part 1
+
+//#region Part 2
 const linesCopy = [...lines];
 let batchOfThreeFullStringPrioritySum = 0;
 while (linesCopy.length > 0) {
@@ -81,3 +84,4 @@ while (linesCopy.length > 0) {
     batchOfThreeFullStringPrioritySum += characterToPriority(intersectingCharacter);
 }
 console.log(batchOfThreeFullStringPrioritySum);
+//#endregion Part 2

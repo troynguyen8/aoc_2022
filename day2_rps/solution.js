@@ -1,6 +1,6 @@
 import { parseLinesToArraySync } from '../utilities/parseLinesToArray.js';
 
-// Begin region: function declarations
+//#region Function Declarations
 const SELF_CHARACTER_INTENT = {
     play: 'play',
     outcome: 'outcome'
@@ -97,13 +97,16 @@ function gameScore(opponentCharacter, selfCharacter, selfCharacterIntent = SELF_
     }
     return pointsFromOutcome + basePoints;
 };
-// End region: function declarations
+//#endregion Function Declarations
 
 const lines = parseLinesToArraySync('./input.txt');
-// Part 1
+
+//#region Part 1
 const scoresWhereSelfCharIsMove = linesToScores(lines);
 console.log(scoresWhereSelfCharIsMove.reduce((acc, ele) => acc + ele, 0));
+//#endregion Part 1
 
-// Part 2
+//#region Part 2
 const scoresWhereSelfCharIsOutcome = linesToScores(lines, SELF_CHARACTER_INTENT.outcome);
 console.log(scoresWhereSelfCharIsOutcome.reduce((acc, ele) => acc + ele, 0));
+//#endregion Part 2

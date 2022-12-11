@@ -1,6 +1,6 @@
 import { parseLinesToArraySync } from "../utilities/parseLinesToArray.js";
 
-// Begin Region: Function Declarations
+//#region Function Declarations
 function getRangesFromLine(line) {
     const numbers = line.match(/\d+/g).map((numAsStr) => +numAsStr);
     const [range1Min, range1Max, range2Min, range2Max] = numbers;
@@ -34,16 +34,20 @@ function hasOverlappingRange(range1, range2) {
 
     return true;
 }
-// End Region: Function Declarations
+//#endregion Function Declarations
 
 const lines = parseLinesToArraySync('./input.txt');
-// part 1
+
+//#region Part 1
 console.log(lines.filter((line) => {
     const [range1, range2] = getRangesFromLine(line);
     return hasSupersetRange(range1, range2);
 }).length);
-// part 2
+//#endregion Part 1
+
+//#region Part 2
 console.log(lines.filter((line) => {
     const [range1, range2] = getRangesFromLine(line);
     return hasOverlappingRange(range1, range2);
 }).length);
+//#endregion Part 2

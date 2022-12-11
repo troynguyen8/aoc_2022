@@ -35,8 +35,6 @@ function rawStackInitInstructionsToStacks(stackInitInstructions) {
 }
 function processStackOp(stackOp, stacks, preserveBatchOrder = false) {
     const [moveAmount, fromStackNum, toStackNum] = stackOp.match(/\d+/g);
-    // const fromStack = stacks.find((stack) => stack.stackName === fromStackNum);
-    // const toStack = stacks.find((stack) => stack.stackName === toStackNum);
     const fromStack = stacks[(+fromStackNum) - 1];
     const toStack = stacks[(+toStackNum) - 1];
 

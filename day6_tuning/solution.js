@@ -1,9 +1,9 @@
 import { parseLinesToArraySync } from '../utilities/parseLinesToArray.js';
 
 //#region Function Declarations
-function stringHasNoDuplicates(string) {
+function strHasNoDuplicateChars(string) {
     const characterSet = new Set();
-    for (let char of string) {
+    for (const char of string) {
         if (characterSet.has(char)) {
             return false;
         }
@@ -32,11 +32,11 @@ function getSubstringOfLengthNIndicesThatSatisfy(string, substringLength, callba
 
 const [dataStreamString] = parseLinesToArraySync('./input.txt');
 //#region Part 1
-const [, part1EndIndexExclusive] = getSubstringOfLengthNIndicesThatSatisfy(dataStreamString, 4, stringHasNoDuplicates);
+const [, part1EndIndexExclusive] = getSubstringOfLengthNIndicesThatSatisfy(dataStreamString, 4, strHasNoDuplicateChars);
 console.log(part1EndIndexExclusive);
 //#endregion Part 1
 
 //#region Part 2
-const [, part2EndIndexExclusive] = getSubstringOfLengthNIndicesThatSatisfy(dataStreamString, 14, stringHasNoDuplicates);
+const [, part2EndIndexExclusive] = getSubstringOfLengthNIndicesThatSatisfy(dataStreamString, 14, strHasNoDuplicateChars);
 console.log(part2EndIndexExclusive);
 //#endregion Part 2

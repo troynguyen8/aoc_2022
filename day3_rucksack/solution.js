@@ -13,7 +13,7 @@ function findIntersectionBetweenStrings(...strings) {
     const charMaps = [];
     strings.forEach((str) => {
         const strCharMap = {};
-        for (let char of str) {
+        for (const char of str) {
             strCharMap[char] = strCharMap[char] ? strCharMap[char] + 1 : 0;
         }
         charMaps.push(strCharMap);

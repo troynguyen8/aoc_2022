@@ -53,7 +53,7 @@ function processStackOp(stackOp, stacks, preserveBatchOrder = false) {
     return stacks;
 }
 function getStacksAsStrings(stacks) {
-    stacks.map((stack) => stack.toString());
+    return stacks.map((stack) => stack.toString());
 }
 function getStackTops(stacks) {
     return stacks.map((stack) => stack.peek());

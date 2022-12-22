@@ -17,16 +17,6 @@ function rawInputToMatrix(input) {
 }
 
 /**
- * Determines if the element located at the given row and column index is the maximum element in its row
- * @param {number[][]} matrix
- * @param {number} rowIndex 0-indexed index for the element row
- * @param {number} colIndex 0-indexed index for the element column
- */
-function isElementMaxInRow(matrix, rowIndex, colIndex) {
-    return getIndexOfLargerElementLeftward(matrix, rowIndex, colIndex) === undefined && getIndexOfLargerElementRightward(matrix, rowIndex, colIndex) === undefined;
-}
-
-/**
  * Determines the righter column index of the element larger than the element at the specified indices, if such an element exists.
  * @param {number[][]} matrix
  * @param {number} rowIndex 0-indexed index for the element row
@@ -72,16 +62,6 @@ function getIndexOfLargerElementLeftward(matrix, rowIndex, colIndex) {
     }
 
     return isGreaterThanAllLefterCols ? undefined : leftColumnRunner;
-}
-
-/**
- * Determines if the element located at the given row and column index is the maximum element in its column
- * @param {number[][]} matrix
- * @param {number} rowIndex 0-indexed index for the element row
- * @param {number} colIndex 0-indexed index for the element column
- */
-function isElementMaxInCol(matrix, rowIndex, colIndex) {
-    return getIndexOfLargerElementUpward(matrix, rowIndex, colIndex) === undefined && isElementGreaterThanLowerElements(matrix, rowIndex, colIndex) === undefined;
 }
 
 /**

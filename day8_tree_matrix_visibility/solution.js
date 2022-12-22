@@ -23,16 +23,17 @@ function rawInputToMatrix(input) {
  * @param {number} colIndex 0-indexed index for the element column
  */
 function isElementMaxInRow(matrix, rowIndex, colIndex) {
-    return isElementGreaterThanLefterElements(matrix, rowIndex, colIndex) && isElementGreaterThanRighterElements(matrix, rowIndex, colIndex);
+    return getIndexOfLargerElementLeftward(matrix, rowIndex, colIndex) === undefined && getIndexOfLargerElementRightward(matrix, rowIndex, colIndex) === undefined;
 }
 
 /**
- * Determines if the element located at the given row and column index is greater than all elements to the right of it in the matrix
+ * Determines the righter column index of the element larger than the element at the specified indices, if such an element exists.
  * @param {number[][]} matrix
  * @param {number} rowIndex 0-indexed index for the element row
  * @param {number} colIndex 0-indexed index for the element column
+ * @returns {undefined | number}
  */
-function isElementGreaterThanRighterElements(matrix, rowIndex, colIndex) {
+function getIndexOfLargerElementRightward(matrix, rowIndex, colIndex) {
     const element = matrix[rowIndex][colIndex];
 
     let rightColumnRunner = colIndex + 1;
@@ -46,16 +47,17 @@ function isElementGreaterThanRighterElements(matrix, rowIndex, colIndex) {
         rightColumnRunner++;
     }
 
-    return isGreaterThanAllRighterCols;
+    return isGreaterThanAllRighterCols ? undefined : rightColumnRunner;
 }
 
 /**
- * Determines if the element located at the given row and column index is greater than all elements to the left of it in the matrix
+ * Determines the lefter column index of the element larger than the element at the specified indices, if such an element exists.
  * @param {number[][]} matrix
  * @param {number} rowIndex 0-indexed index for the element row
  * @param {number} colIndex 0-indexed index for the element column
+ * @returns {undefined | number}
  */
-function isElementGreaterThanLefterElements(matrix, rowIndex, colIndex) {
+function getIndexOfLargerElementLeftward(matrix, rowIndex, colIndex) {
     const element = matrix[rowIndex][colIndex];
 
     let leftColumnRunner = colIndex - 1;
@@ -69,7 +71,7 @@ function isElementGreaterThanLefterElements(matrix, rowIndex, colIndex) {
         leftColumnRunner--;
     }
 
-    return isGreaterThanAllLefterCols;
+    return isGreaterThanAllLefterCols ? undefined : leftColumnRunner;
 }
 
 /**
@@ -79,16 +81,16 @@ function isElementGreaterThanLefterElements(matrix, rowIndex, colIndex) {
  * @param {number} colIndex 0-indexed index for the element column
  */
 function isElementMaxInCol(matrix, rowIndex, colIndex) {
-    return isElementGreaterThanUpperElements(matrix, rowIndex, colIndex) && isElementGreaterThanLowerElements(matrix, rowIndex, colIndex);
+    return getIndexOfLargerElementUpward(matrix, rowIndex, colIndex) === undefined && isElementGreaterThanLowerElements(matrix, rowIndex, colIndex) === undefined;
 }
 
 /**
- * Determines if the element located at the given row and column index is greater than all elements to the top of it in the matrix
+ * Determines the upper row index of the element larger than the element at the specified indices, if such an element exists.
  * @param {number[][]} matrix
  * @param {number} rowIndex 0-indexed index for the element row
  * @param {number} colIndex 0-indexed index for the element column
  */
-function isElementGreaterThanUpperElements(matrix, rowIndex, colIndex) {
+function getIndexOfLargerElementUpward(matrix, rowIndex, colIndex) {
     const element = matrix[rowIndex][colIndex];
 
     let upRowRunner = rowIndex - 1;
@@ -102,16 +104,16 @@ function isElementGreaterThanUpperElements(matrix, rowIndex, colIndex) {
         upRowRunner--;
     }
 
-    return isGreaterThanAllUpperRows;
+    return isGreaterThanAllUpperRows ? undefined : upRowRunner;
 }
 
 /**
- * Determines if the element located at the given row and column index is greater than all elements to the bottom of it in the matrix
+ * Determines the lower row index of the element larger than the element at the specified indices, if such an element exists.
  * @param {number[][]} matrix
  * @param {number} rowIndex 0-indexed index for the element row
  * @param {number} colIndex 0-indexed index for the element column
  */
-function isElementGreaterThanLowerElements(matrix, rowIndex, colIndex) {
+function getIndexOfLargerElementDownward(matrix, rowIndex, colIndex) {
     const element = matrix[rowIndex][colIndex];
 
     let downRowRunner = rowIndex + 1;
@@ -125,21 +127,23 @@ function isElementGreaterThanLowerElements(matrix, rowIndex, colIndex) {
         downRowRunner++;
     }
 
-    return isGreaterThanAllRighterCols;
+    return isGreaterThanAllRighterCols ? undefined : downRowRunner;
 }
 //#endregion Function Declarations
 
-//#region Part 1
+
 const lines = parseLinesToArraySync('input.txt');
 const linesAsMatrix = rawInputToMatrix(lines);
+
+//#region Part 1
 let visibilityCount = 0;
 const visibilityMatrix = linesAsMatrix.map((row, i) => {
     return row.map((_, j) => {
         const isVisible =
-            isElementGreaterThanLefterElements(linesAsMatrix, i, j) ||
-            isElementGreaterThanRighterElements(linesAsMatrix, i, j) ||
-            isElementGreaterThanUpperElements(linesAsMatrix, i, j) ||
-            isElementGreaterThanLowerElements(linesAsMatrix, i, j);
+            getIndexOfLargerElementLeftward(linesAsMatrix, i, j) === undefined ||
+            getIndexOfLargerElementRightward(linesAsMatrix, i, j) === undefined ||
+            getIndexOfLargerElementUpward(linesAsMatrix, i, j) === undefined ||
+            getIndexOfLargerElementDownward(linesAsMatrix, i, j) === undefined;
         if (isVisible) {
             visibilityCount++;
         }
@@ -150,5 +154,20 @@ console.log(visibilityCount);
 //#endregion Part 1
 
 //#region Part 2
+let maxVisibilityScore = 0;
+const visibilityScoreMatrix = linesAsMatrix.map((row, i) => {
+    return row.map((_, j) => {
+        const numTreesVisibleLeft = j - (getIndexOfLargerElementLeftward(linesAsMatrix, i, j) ?? 0);
+        const numTreesVisibleRight = ((getIndexOfLargerElementRightward(linesAsMatrix, i, j) ?? row.length - 1) - j);
+        const numTreesVisibleUp = (i - (getIndexOfLargerElementUpward(linesAsMatrix, i, j) ?? 0));
+        const numTreesVisibleDown = ((getIndexOfLargerElementDownward(linesAsMatrix, i, j) ?? linesAsMatrix.length - 1) - i);
 
+        const visibilityScore = numTreesVisibleLeft * numTreesVisibleRight * numTreesVisibleUp * numTreesVisibleDown;
+        maxVisibilityScore = Math.max(maxVisibilityScore, visibilityScore);
+
+        return visibilityScore;
+    });
+});
+
+console.log(maxVisibilityScore);
 //#endregion Part 2

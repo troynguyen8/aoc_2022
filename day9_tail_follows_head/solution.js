@@ -76,48 +76,48 @@ function getNextTailCoord([tailX, tailY], [headX, headY]) {
 }
 
 /**
- * Gets the number
+ * Gets the number of coordinates the tail visits after processing a series of directional instructions
  * @param {Instruction[]} instructions 
  * @returns {number}
  */
-function getNumberOfTailVisitedCoords(instructions) {
+function getNumberOfTailVisitedCoords(instructions, numNodes = 2) {
     /**
      * The set of visited coordinates in format of "x,y"
      * @type {Set<string>}
      */
     const tailVisitedCoordsSet = new Set(["0,0"]);
-
     /**
-     * X, Y coordinate of the head
-     * @type {[number, number]}
+     * The coordinates to keep track of. 0 is the head, and numNodes - 1 is the tail.
+     * @type {[number, number][]}
      */
-    let currentHeadCoord = [0, 0];
-
-    /**
-     * X, Y coordinate of the tail
-     * @type {[number, number]}
-     */
-    let currentTailCoord = [0, 0];
+    const nodeCoordinates = [];
+    for (let i = 1; i <= numNodes; i++) {
+        nodeCoordinates.push([0, 0]);
+    }
 
     instructions.forEach(([direction, numMoves]) => {
         for (let tick = 1; tick <= numMoves; tick++) {
             switch (direction) {
                 case "U":
-                    currentHeadCoord[1] = currentHeadCoord[1] + 1;
+                    nodeCoordinates[0][1] = nodeCoordinates[0][1] + 1;
                     break;
                 case "D":
-                    currentHeadCoord[1] = currentHeadCoord[1] - 1;
+                    nodeCoordinates[0][1] = nodeCoordinates[0][1] - 1;
                     break;
                 case "L":
-                    currentHeadCoord[0] = currentHeadCoord[0] - 1;
+                    nodeCoordinates[0][0] = nodeCoordinates[0][0] - 1;
                     break;
                 case "R":
-                    currentHeadCoord[0] = currentHeadCoord[0] + 1;
+                    nodeCoordinates[0][0] = nodeCoordinates[0][0] + 1;
                     break;
             }
 
-            currentTailCoord = getNextTailCoord(currentTailCoord, currentHeadCoord);
-            tailVisitedCoordsSet.add(`${currentTailCoord[0]},${currentTailCoord[1]}`);
+            for (let tailRunner = 1; tailRunner < nodeCoordinates.length; tailRunner++) {
+                nodeCoordinates[tailRunner] = getNextTailCoord(nodeCoordinates[tailRunner], nodeCoordinates[tailRunner - 1]);
+            }
+
+            // Tail is the last element in the array
+            tailVisitedCoordsSet.add(`${nodeCoordinates.at(-1)[0]},${nodeCoordinates.at(-1)[1]}`);
         }
     });
 
@@ -127,11 +127,12 @@ function getNumberOfTailVisitedCoords(instructions) {
 
 
 const lines = parseLinesToArraySync('input.txt');
+const instructions = rawInputToInstructions(lines);
 
 //#region Part 1
-const part1Instructions = rawInputToInstructions(lines);
-console.log(getNumberOfTailVisitedCoords(part1Instructions));
+console.log(getNumberOfTailVisitedCoords(instructions, 2));
 //#endregion Part 1
 
 //#region Part 2
+console.log(getNumberOfTailVisitedCoords(instructions, 10));
 //#endregion Part 2

@@ -85,5 +85,39 @@ console.log(twentySignalStr + sixtySignalStr + hundredSignalStr + oneFortySignal
 //#endregion Part 1
 
 //#region Part 2
+/**
+ * Utility to print the matrix without word wrap
+ * @param {string[][]} matrix 
+ */
+const printMatrix = (matrix) => {
+    for (const row of matrix) {
+        console.log(row.join(''));
+    }
+}
+
+const pixelMatrix = [];
+// 6 rows of 40
+for (let i = 1; i <= 6; i++) {
+    pixelMatrix.push(new Array(40).fill('.'));
+}
+
+pixelMatrix[0][0] = '#';
+for (let cycle = 1; cycle <= 240; cycle++) {
+    const pixel = cycle - 1;
+    const rowIndex = Math.floor(pixel / 40);
+    const columnIndex = pixel - (rowIndex * 40);
+
+    const regValue = getValueAfterNCycles(instructions, cycle);
+    const normalizedRegValue = regValue + (rowIndex * 40)
+
+    if (Math.abs(normalizedRegValue - pixel) <= 1) {
+        // Figure out what's going on here
+        if (pixelMatrix?.[rowIndex]?.[columnIndex]) {
+            pixelMatrix[rowIndex][columnIndex] = '#';
+        }
+    }
+}
+
+printMatrix(pixelMatrix);
 
 //#endregion Part 2

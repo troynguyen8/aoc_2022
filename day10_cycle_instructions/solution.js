@@ -111,10 +111,7 @@ for (let cycle = 1; cycle <= 240; cycle++) {
     const normalizedRegValue = regValue + (rowIndex * 40)
 
     if (Math.abs(normalizedRegValue - pixel) <= 1) {
-        // Figure out what's going on here
-        if (pixelMatrix?.[rowIndex]?.[columnIndex]) {
-            pixelMatrix[rowIndex][columnIndex] = '#';
-        }
+        pixelMatrix[rowIndex][columnIndex] = '#';
     }
 }
 
